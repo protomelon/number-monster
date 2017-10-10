@@ -30,7 +30,7 @@ public class NumberMonster {
                     int sum = random1 + random2;
 
                     System.out.printf("%n%d + %d = ", random1, random2);
-                    int answer = Integer.parseInt(reader.next());
+                    int answer = getInt();
 
                     if (answer == sum) {
                         score++;
@@ -57,7 +57,7 @@ public class NumberMonster {
                             break;
                     }
 
-                    answer = Integer.parseInt(reader.next());
+                    answer = getInt();
 
                     if (answer == difference) {
                         score++;
@@ -74,7 +74,7 @@ public class NumberMonster {
                     product = random1 * random2;
 
                     System.out.printf("%n%d x %d = ", random1, random2);
-                    answer = Integer.parseInt(reader.next());
+                    answer = getInt();
 
                     if (answer == product) {
                         score++;
@@ -93,7 +93,7 @@ public class NumberMonster {
                         case 1:
                             System.out.printf("%n%d / %d = ", random1, random2);
                             quotient = random1 / random2;
-                            answer = Integer.parseInt(reader.next());
+                            answer = getInt();
 
                             if (answer == quotient) {
                                 score++;
