@@ -95,7 +95,7 @@ public class NumberMonster {
                     break;
 
                 case 4:
-                    // case 4: multiplication
+                    // case 4: division
                     random1 = ThreadLocalRandom.current().nextInt(11, 100);
                     random2 = ThreadLocalRandom.current().nextInt(2, 10);
 
