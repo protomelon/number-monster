@@ -14,8 +14,8 @@ public class NumberMonster {
         // Prompts user for name
         String username;
         
-        // Currently only acts as buffer before beginning game,
-        // consider implementing leaderboard of high scores using inputted username (local file? online?)
+        // Currently only acts as buffer before beginning game
+        // Consider implementing leaderboard of high scores using inputted username (local file? online?)
         System.out.printf("%nEnter your name to play: %n");
         username = reader.next();
         
@@ -24,7 +24,7 @@ public class NumberMonster {
         
         // Get current run time of program
         // long start timer does not begin at 0,
-        // will be subtracted from [long end] to get user's final time
+        // but will be subtracted from [long end] to get user's final time
         long start = System.currentTimeMillis();
 
         do {
