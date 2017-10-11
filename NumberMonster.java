@@ -1,29 +1,40 @@
 import java.util.Scanner;
-import java.util.concurrent.ThreadLocalRandom;
+
+// Used to generate random ints
+import java.util.concurrent.ThreadLocalRandom;  
 
 public class NumberMonster {
 
     public static void main(String[] args) {
-        //create scanner, print welcome message
+        
+        // Scanner created to read user input
         Scanner reader = new Scanner(System.in);
         System.out.printf("%nWelcome to Number Monster!%nHow quickly can you solve 12 simple mental math questions?%n");
         
-        //prompt user for name
+        // Prompts user for name
         String username;
+        
+        // Currently only acts as buffer before beginning game,
+        // consider implementing leaderboard of high scores using inputted username
         System.out.printf("%nEnter your name to play: %n");
         username = reader.next();
         
-        //Set score to 0 and start a timer
+        // Score counter to 0
         int score = 0;
+        
+        // Get current run time of program
+        // long start timer does not begin at 0,
+        // will be subtracted from [long end] to get user's final time
         long start = System.currentTimeMillis();
 
         do {
-            //generate a random number to decide what kind of math problem the user will solve next
+            // int operation will be assigned random int between 1 and 4 inclusive
+            // outputting 1 of 4 operational questions (addition, subtraction, multiplication, division)
             int operation = ThreadLocalRandom.current().nextInt(1, 4);
 
             switch (operation) {
                 case 1:
-                    //Case 1 - addition
+                    // case 1: addition
                     int random1 = ThreadLocalRandom.current().nextInt(1, 10);
                     int random2 = ThreadLocalRandom.current().nextInt(1, 10);
 
@@ -38,13 +49,15 @@ public class NumberMonster {
                     break;
 
                 case 2:
-                    //Case 2 - Subtraction
+                    // case 2: subtraction
                     random1 = ThreadLocalRandom.current().nextInt(1, 10);
                     random2 = ThreadLocalRandom.current().nextInt(1, 10);
 
+                    // To prevent asking subtraction questions with negative differences
                     int order = random1 > random2 ? 1 : 2;
                     int difference = 0;
-
+                    
+                    // Subtract smaller int from larger int
                     switch (order) {
                         case 1:
                             difference = random1 - random2;
@@ -65,7 +78,7 @@ public class NumberMonster {
                     break;
 
                 case 3:
-                    //Case 3 - multiplication
+                    // case 3: multiplication
                     random1 = ThreadLocalRandom.current().nextInt(1, 10);
                     random2 = ThreadLocalRandom.current().nextInt(1, 10);
 
@@ -82,13 +95,15 @@ public class NumberMonster {
                     break;
 
                 case 4:
-                    //case 4 - division
+                    // case 4: multiplication
                     random1 = ThreadLocalRandom.current().nextInt(11, 100);
                     random2 = ThreadLocalRandom.current().nextInt(2, 10);
 
+                    // To prevent asking division questions with remainders
                     int modulus = random1 % random2 == 0 ? 1 : 2;
                     int quotient;
-
+                    
+                    // Continue assigning new random ints until quotient does not contain remainder
                     switch (modulus) {
                         case 1:
                             System.out.printf("%n%d / %d = ", random1, random2);
@@ -105,9 +120,11 @@ public class NumberMonster {
                     }
                     break;
             }
-        } while (score != 12); //once the user has done 12 problems, break the loop
+        // Once user has correctly solved 12 problems, break the loop
+        // Incorrect answers do not increment int score
+        } while (score != 12); 
         
-        //Calculate ending time
+        // Calculate final time
         long end = System.currentTimeMillis();
         long time = end - start;
         long timeSec = time / 1000;
@@ -115,7 +132,7 @@ public class NumberMonster {
         long seconds;
 
         if (timeSec > 60) {
-            //Output score and time
+            // Output score and time
             minutes = timeSec / 60;
             seconds = timeSec - minutes * 60;
             System.out.printf("You win! Your final time is: %d minute%s and %d seconds", minutes, minutes > 1 ? "" : "s", seconds);
