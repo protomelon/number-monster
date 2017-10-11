@@ -15,7 +15,7 @@ public class NumberMonster {
         String username;
         
         // Currently only acts as buffer before beginning game,
-        // consider implementing leaderboard of high scores using inputted username
+        // consider implementing leaderboard of high scores using inputted username (local file? online?)
         System.out.printf("%nEnter your name to play: %n");
         username = reader.next();
         
