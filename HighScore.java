@@ -107,7 +107,7 @@ public class HighScore {
 
 
         // Print the scores from fastest to slowest.
-        for (int i = scores.length - 1 ; i > 0; i--)
+        for (int i = scores.length - 1 ; i >= 0; i--)
         {
             long timeSec = scores[i].getScore() / 1000;
             long timemins = timeSec / 60;
@@ -124,26 +124,40 @@ public class HighScore {
      */
     public void addScore(String player, long points)
     {
-
         Score score = new Score(player.replace(",", " "), points);
 
-        // Copy the the score variable into a temporary place
-        Score[] oldScores = scores;
+		// Define a default scores variable if scores is null (IE, it failed to load above)
+		if(scores != null)
+		{
+			// Copy the the score variable into a temporary place
+			Score[] oldScores = scores;
+			
+			// Replace the scores with a bigger array
+			scores = new Score[scores.length + 1];
+					
+			// Refill the rest of the array
+			for (int i = 0; i < oldScores.length; i++)
+			{
+				scores[i] = oldScores[i];
+			}
+			
+			// Let the temp array be destroyed
+			oldScores = null;
+			
+		}
+		else
+		{
+			
+			// The array was not initialized. Initialize it with a single element 
+			scores = new Score[1];
+			
+		}
+			
+			// Add the new element to the array at the final position.
+			scores[scores.length - 1] = score;
 
-        // Replace the scores with a bigger array
-        scores = new Score[scores.length + 1];
 
-        // Refill the array
-        for (int i = 0; i < oldScores.length; i++)
-        {
-            scores[i] = oldScores[i];
-        }
 
-        // Add the new element to the array at the final position.
-        scores[scores.length - 1] = score;
-
-        // Let the temp  array be destroyed
-        oldScores = null;
     }
 
     /**
