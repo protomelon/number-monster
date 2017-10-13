@@ -1,0 +1,179 @@
+import java.io.File;
+import java.io.IOException;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+import java.util.Arrays;
+/**
+ * HighScore - Handles the loading, displaying, updating, and saving of high scores
+ * @author DManness
+ * @version 01
+ * Date Created: 2017-10-12
+ * Date Modified: 2017-10-12
+ *
+ * -- Changelog --
+ *
+ * -- TODO --
+ * Reimplement the scores array as an arrayList for easier adding, sorting, removing, etc...
+ */
+public class HighScore
+{
+    private File highScoreFile;
+    private Score[] scores;
+
+    public HighScore(String hsFilePath)
+    {
+        loadHighScores(hsFilePath);
+    }
+
+
+    private void loadHighScores(String hsFilePath)
+    {
+        // Define a Scanner to read the file
+        Scanner fReader;
+        // Try to load the file
+        highScoreFile = new File(hsFilePath);
+
+        // Check if the file exists and create it if it does not
+        if(highScoreFile.exists())
+        {
+            try
+            {
+                // Try to read the file
+                fReader = new Scanner(highScoreFile);
+
+                // Count the number of tokens (lines) in the file
+                int lines = 0;
+                while (fReader.hasNextLine())
+                {
+                    lines ++;
+                    fReader.nextLine();
+                }
+
+                // Reset the Scanner to read it again
+                fReader = new Scanner(highScoreFile);
+
+                // Initialize an array to hold all of the scores
+                scores = new Score[lines];
+
+                // Read the file into an array of scores
+                int i = 0;
+                while (fReader.hasNextLine())
+                {
+                    // Split the line into an array separated by ','
+                    String[] current = fReader.nextLine().split(",");
+
+                    // Initialize a new score object
+                    scores[i] = new Score(current[1].trim(), Long.parseLong(current[0].trim())) ;
+
+                    //System.out.println(scores[i].getScore() + " | " + scores[i].getPlayer());
+
+                    // Iterate the counter
+                    i++;
+                }
+
+                // Close the Scanner
+                fReader.close();
+            } catch (FileNotFoundException e)
+            {
+                System.out.println("Warning! Could not create a High Score File, no high scores will be displayed");
+            }
+
+        }else
+        {
+            // The file does not exist, attempt to create a new one.
+            System.out.println("High Score File was not found. Making a new one...");
+            try
+            {
+                // Create a new file
+                highScoreFile.createNewFile();
+            } catch (IOException e)
+            {
+                System.out.println("Warning! Could not create a High Score File, no high scores will be displayed");
+            }
+        }
+    }
+
+    /**
+     * Returns an array containing all of the current scores in the high score tables.
+     */
+    public Score[] getScoresList()
+    {
+        return scores;
+    }
+
+    /**
+     * Prints the currently loaded high scores list.
+     */
+    public void printHighScores()
+    {
+        // Define a list of high scores
+        // Sort the array
+        Arrays.sort(scores);
+
+        // Print the header for the high scores list
+        System.out.printf("---------------------------%n");
+        System.out.printf("%7s%s%n", "", "High Scores");
+        System.out.printf("---------------------------%n");
+        System.out.printf("%-20s %s%n", "Player", "Score");
+        System.out.printf("%-20s %s%n", "------", "-----");
+
+        for (Score s : scores)
+        {
+            System.out.printf("%-20s %d%n", s.getPlayer(), s.getScore());
+        }
+
+    }
+
+}
+
+/**
+ * Score - holds a single instance of a score object
+ * @author DManness
+ * @version 01
+ * Date Created: 2017-10-12
+ * Date Modified: 2017-10-12
+ *
+ * -- Changelog --
+ */
+class Score implements Comparable<Score>
+{
+    // Declare Class variables
+    private long score;
+    private String player;
+
+    /**
+     * @param player - The name of the player who acheived the score
+     * @param score - The Score the player received
+     */
+    public Score(String player, long score)
+    {
+        // Set the score of this instance
+        this.player = player;
+        this.score = score;
+    }
+
+    /**
+     * Compares two score objects to determine whether one is bigger than the other
+     * Returns a positive if anotherScore < x, a negative if anotherScore > x, 0 if they are equal
+     * @param anotherScore - A score object that you are comparing too.
+     * @return - a positive if anotherScore < x, a negative if anotherScore > x, 0 if they are equal
+     */
+    @Override
+    public int compareTo(Score anotherScore)
+    {
+        return (int) (anotherScore.getScore() - score);
+    }
+
+
+    // Getters and setters
+    public String getPlayer()
+    {
+        return player;
+    }
+
+    public long getScore()
+    {
+        return score;
+    }
+
+}
