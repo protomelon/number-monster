@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.Arrays;
+import java.io.PrintWriter;
 /**
  * HighScore - Handles the loading, displaying, updating, and saving of high scores
  * @author DManness
@@ -15,37 +16,31 @@ import java.util.Arrays;
  * -- TODO --
  * Reimplement the scores array as an arrayList for easier adding, sorting, removing, etc...
  */
-public class HighScore
-{
+public class HighScore {
     private File highScoreFile;
     private Score[] scores;
 
-    public HighScore(String hsFilePath)
-    {
+    public HighScore(String hsFilePath) {
         loadHighScores(hsFilePath);
     }
 
 
-    private void loadHighScores(String hsFilePath)
-    {
+    private void loadHighScores(String hsFilePath) {
         // Define a Scanner to read the file
         Scanner fReader;
         // Try to load the file
         highScoreFile = new File(hsFilePath);
 
         // Check if the file exists and create it if it does not
-        if(highScoreFile.exists())
-        {
-            try
-            {
+        if (highScoreFile.exists()) {
+            try {
                 // Try to read the file
                 fReader = new Scanner(highScoreFile);
 
                 // Count the number of tokens (lines) in the file
                 int lines = 0;
-                while (fReader.hasNextLine())
-                {
-                    lines ++;
+                while (fReader.hasNextLine()) {
+                    lines++;
                     fReader.nextLine();
                 }
 
@@ -57,13 +52,12 @@ public class HighScore
 
                 // Read the file into an array of scores
                 int i = 0;
-                while (fReader.hasNextLine())
-                {
+                while (fReader.hasNextLine()) {
                     // Split the line into an array separated by ','
                     String[] current = fReader.nextLine().split(",");
 
                     // Initialize a new score object
-                    scores[i] = new Score(current[1].trim(), Long.parseLong(current[0].trim())) ;
+                    scores[i] = new Score(current[1].trim(), Long.parseLong(current[0].trim()));
 
                     //System.out.println(scores[i].getScore() + " | " + scores[i].getPlayer());
 
@@ -73,21 +67,17 @@ public class HighScore
 
                 // Close the Scanner
                 fReader.close();
-            } catch (FileNotFoundException e)
-            {
+            } catch (FileNotFoundException e) {
                 System.out.println("Warning! Could not create a High Score File, no high scores will be displayed");
             }
 
-        }else
-        {
+        } else {
             // The file does not exist, attempt to create a new one.
             System.out.println("High Score File was not found. Making a new one...");
-            try
-            {
+            try {
                 // Create a new file
                 highScoreFile.createNewFile();
-            } catch (IOException e)
-            {
+            } catch (IOException e) {
                 System.out.println("Warning! Could not create a High Score File, no high scores will be displayed");
             }
         }
@@ -96,30 +86,99 @@ public class HighScore
     /**
      * Returns an array containing all of the current scores in the high score tables.
      */
-    public Score[] getScoresList()
-    {
+    public Score[] getScoresList() {
         return scores;
     }
 
     /**
      * Prints the currently loaded high scores list.
      */
-    public void printHighScores()
-    {
+    public void printHighScores() {
         // Define a list of high scores
         // Sort the array
         Arrays.sort(scores);
 
         // Print the header for the high scores list
-        System.out.printf("---------------------------%n");
-        System.out.printf("%7s%s%n", "", "High Scores");
-        System.out.printf("---------------------------%n");
+        System.out.printf("------------------------------%n");
+        System.out.printf("%9s%s%n", "", "High Scores");
+        System.out.printf("------------------------------%n");
         System.out.printf("%-20s %s%n", "Player", "Score");
         System.out.printf("%-20s %s%n", "------", "-----");
 
-        for (Score s : scores)
+
+        // Print the scores from fastest to slowest.
+        for (int i = scores.length - 1 ; i > 0; i--)
         {
-            System.out.printf("%-20s %d%n", s.getPlayer(), s.getScore());
+            long timeSec = scores[i].getScore() / 1000;
+            long timemins = timeSec / 60;
+            timeSec = timeSec % 60;
+            long timeMS = (scores[i].getScore() % 1000);
+            System.out.printf("%-20s %02d:%02d.%03d%n", scores[i].getPlayer(),timemins, timeSec, timeMS);
+        }
+
+    }
+
+    /** Add a new score to the high scores list
+     * @param player - the name of the player to store - NOTE - for safety, the character ',' will be replaced by ' '
+     * @param points - The score the player acheived
+     */
+    public void addScore(String player, long points)
+    {
+
+        Score score = new Score(player.replace(",", " "), points);
+
+        // Copy the the score variable into a temporary place
+        Score[] oldScores = scores;
+
+        // Replace the scores with a bigger array
+        scores = new Score[scores.length + 1];
+
+        // Refill the array
+        for (int i = 0; i < oldScores.length; i++)
+        {
+            scores[i] = oldScores[i];
+        }
+
+        // Add the new element to the array at the final position.
+        scores[scores.length - 1] = score;
+
+        // Let the temp  array be destroyed
+        oldScores = null;
+    }
+
+    /**
+     * Overwrites the current scores file
+     * TODO - implement a checksum to prevent the user from manually editing the score files.
+     */
+    public void saveHighScoresFile()
+    {
+        try {
+
+            // Backup the old file
+            File backupFile = new File (highScoreFile.toString() + "_old");
+            highScoreFile.renameTo(backupFile);
+
+
+            // Purge the existing high scores files
+            highScoreFile.delete();
+
+            // Define a printwriter to export to file
+            PrintWriter fOut = new PrintWriter(highScoreFile);
+
+            // Write the entire high scores array to the file
+            for (Score s : scores)
+            {
+                fOut.println(s.getScore()+","+s.getPlayer());
+            }
+
+            // Close the file
+            fOut.close();
+            // Delete the backup file
+            backupFile.delete();
+
+        } catch (FileNotFoundException e)
+        {
+            System.out.println("Warning: Could not write the high scores file. Scores for this round may be lost.");
         }
 
     }

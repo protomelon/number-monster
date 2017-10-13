@@ -139,12 +139,17 @@ public class NumberMonster {
         long minutes;
         long seconds;
 
+        // Log a new high score
+        highScores.addScore(username, time);
+        // Rewrite the high scores file
+        highScores.saveHighScoresFile();
+
         if (timeSec > 60) {
             // Output score and time
             minutes = timeSec / 60;
             seconds = timeSec - minutes * 60;
             System.out.printf("You win! Your final time is: %d minute%s and %d seconds", minutes, minutes > 1 ? "" : "s", seconds);
-        } 
+        }
         else {
             System.out.printf("%nYou win! Your final time is: %d seconds", timeSec);
         }
