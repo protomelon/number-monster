@@ -18,27 +18,24 @@ public class NumberMonster {
             highScores.printHighScores();
         }
 
-
         // Prompts user for name
         String username;
         
-        // Currently only acts as buffer before beginning game
-        // Consider implementing leaderboard of high scores using inputted username (local file? online?)
         System.out.printf("%nEnter your name to play: %n");
         username = reader.next();
-        
-        // Score counter to 0
+
+        System.out.printf("%nChoose your monster:%n[1] Addition%n[2] Subtraction%n[3] Multiplication%n[4] Division%n[5] All Operations%n%nGame mode: ");
+        int mode = getMode();
+
         int score = 0;
         
-        // Get current run time of program
-        // long start timer does not begin at 0,
-        // but will be subtracted from [long end] to get user's final time
+        // Get current run time of program to be subtracted from end time to get final time (score)
         long start = System.currentTimeMillis();
 
-        do {
-            // int operation will be assigned random int between 1 and 4 inclusive
-            // outputting 1 of 4 operational questions (addition, subtraction, multiplication, division)
-            int operation = ThreadLocalRandom.current().nextInt(1, 4);
+        do {            
+            // If int mode == 5 (All Operations) then int operation is randomized every loop
+            // Otherwise int operation stays the same 
+            int operation = (mode == 5) ? (ThreadLocalRandom.current().nextInt(1, 4)) : mode;
 
             switch (operation) {
                 case 1:
@@ -128,8 +125,8 @@ public class NumberMonster {
                     }
                     break;
             }
-        // Once user has correctly solved 12 problems, break the loop
-        // Incorrect answers do not increment int score
+        // End loop when user has correctly answered 12 questions
+        // Incorrect answers do not increment score
         } while (score != 12); 
         
         // Calculate final time
@@ -175,7 +172,7 @@ public class NumberMonster {
             try {
                 parsed = Integer.parseInt(keyIn.nextLine());
             } catch (Exception e) {
-                // Getting an integer failed.=
+                // Getting an integer failed
                 failed = true;
                 System.out.printf("Try again: ");
             }
@@ -183,5 +180,27 @@ public class NumberMonster {
         } while (failed);
 
         return parsed;
+    }
+    // Used to validate mode input at start of game
+    static int getMode() {
+        Scanner readMode = new Scanner(System.in);
+        int mode = 0;
+        boolean badInt;
+        do {
+            badInt = false;
+            try {
+                do {
+                    mode = Integer.parseInt(readMode.nextLine());
+                    // User must enter 1 of 5 game modes
+                    if (mode < 1 || mode > 5) {
+                        System.out.printf("Enter a valid game mode: ");
+                    }
+                } while (mode < 1 || mode > 5);  
+            } catch (Exception e) {
+                badInt = true;
+                System.out.printf("Enter a valid game mode: ");
+            }
+        } while (badInt);
+        return mode;
     }
 }
