@@ -18,9 +18,7 @@ public class NumberMonster {
             highScores.printHighScores();
         }
 
-        // Prompts user for name
         String username;
-        
         System.out.printf("%nEnter your name to play: %n");
         username = reader.next();
 
