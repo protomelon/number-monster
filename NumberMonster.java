@@ -181,24 +181,28 @@ public class NumberMonster {
     }
     // Used to validate mode input at start of game
     static int getMode() {
+        //Mode is int 1-5
         Scanner readMode = new Scanner(System.in);
         int mode = 0;
         boolean badInt;
+        //Loop until a valid game more is entered
         do {
             badInt = false;
-            try {
+            try { //catch (Exception e) catches bad input exceptions
                 do {
                     mode = Integer.parseInt(readMode.nextLine());
                     // User must enter 1 of 5 game modes
                     if (mode < 1 || mode > 5) {
                         System.out.printf("Enter a valid game mode: ");
                     }
-                } while (mode < 1 || mode > 5);  
+                } while (mode < 1 || mode > 5);  //while game mode isnt within valid range
             } catch (Exception e) {
+                //catch exception if Integer.parseInt fails (ie. user entered something other than an int)
                 badInt = true;
                 System.out.printf("Enter a valid game mode: ");
             }
         } while (badInt);
+        //Return the mode as an int
         return mode;
     }
 }
