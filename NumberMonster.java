@@ -9,7 +9,7 @@ public class NumberMonster {
         
         // Scanner created to read user input
         Scanner reader = new Scanner(System.in);
-        System.out.printf("%nWelcome to Number Monster!%nHow quickly can you solve 12 simple mental math questions?%n");
+        System.out.printf("%nWelcome to Number Monster!%nHow quickly can you solve 12 simple mental math questions?%n%n");
 
         // Loads and displays a list of high scores
         HighScore highScores = new HighScore("high.score");
