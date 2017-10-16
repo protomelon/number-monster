@@ -190,16 +190,12 @@ public class NumberMonster {
             badInt = false;
             try { //catch (Exception e) catches bad input exceptions
                 do {
-                    mode = Integer.parseInt(readMode.nextLine());
-                    // User must enter 1 of 5 game modes
-                    if (mode < 1 || mode > 5) {
-                        System.out.printf("Enter a valid game mode: ");
-                    }
+                        mode = Integer.parseInt(readMode.nextLine());
                 } while (mode < 1 || mode > 5);  //while game mode isnt within valid range
             } catch (Exception e) {
                 //catch exception if Integer.parseInt fails (ie. user entered something other than an int)
                 badInt = true;
-                System.out.printf("Enter a valid game mode: ");
+                System.out.printf("Game mode: ");
             }
         } while (badInt);
         //Return the mode as an int
