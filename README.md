@@ -1,4 +1,4 @@
 # Number Monster
 
-### About
-This game no clickbait, mental math very good, train young one. Buy now
+### Welcome to Number Monster
+How quickly can you solve 12 simple mental math questions?
