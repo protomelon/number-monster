@@ -20,110 +20,45 @@ public class NumberMonster {
         System.out.printf("%nEnter your name to play: %n");
         username = reader.nextLine();
 
-        System.out.printf("%nChoose your monster:%n[1] Addition%n[2] Subtraction%n[3] Multiplication%n[4] Division%n[5] All Operations%n%nGame mode: ");
+        System.out.printf("%nChoose your monster:%n[1] Addition%n[2] Subtraction%n[3] Multiplication%n[4] Division%n[5] All Operations%n%n");
         int mode = getMode();
-
-        int score = 0;
         
         // Get current run time of program to be subtracted from end time to get final time (score)
         long start = System.currentTimeMillis();
+        int totalScore = 0;
 
         do {            
             // If int mode == 5 (All Operations) then int operation is randomized every loop
             // Otherwise int operation stays the same 
             int operation = (mode == 5) ? (ThreadLocalRandom.current().nextInt(1, 4)) : mode;
+            int score;
 
             switch (operation) {
+                // Each (operation) function returns score equals 1 or 0 to increment totalScore
                 case 1:
-                    // case 1: addition
-                    int random1 = ThreadLocalRandom.current().nextInt(1, 10);
-                    int random2 = ThreadLocalRandom.current().nextInt(1, 10);
-
-                    int sum = random1 + random2;
-
-                    System.out.printf("%n%d + %d = ", random1, random2);
-                    int answer = getInt();
-
-                    if (answer == sum) {
-                        score++;
-                    }
+                    score = addition();
+                    totalScore += score;
                     break;
 
                 case 2:
-                    // case 2: subtraction
-                    random1 = ThreadLocalRandom.current().nextInt(1, 10);
-                    random2 = ThreadLocalRandom.current().nextInt(1, 10);
-
-                    // To prevent asking subtraction questions with negative differences
-                    int order = random1 > random2 ? 1 : 2;
-                    int difference = 0;
-                    
-                    // Subtract smaller int from larger int
-                    switch (order) {
-                        case 1:
-                            difference = random1 - random2;
-                            System.out.printf("%n%d - %d = ", random1, random2);
-                            break;
-
-                        case 2:
-                            difference = random2 - random1;
-                            System.out.printf("%n%d - %d = ", random2, random1);
-                            break;
-                    }
-
-                    answer = getInt();
-
-                    if (answer == difference) {
-                        score++;
-                    }
-                    break;
+                    score = subtraction();
+                    totalScore += score;   
+                    break;         
 
                 case 3:
-                    // case 3: multiplication
-                    random1 = ThreadLocalRandom.current().nextInt(1, 10);
-                    random2 = ThreadLocalRandom.current().nextInt(1, 10);
-
-                    int product;
-
-                    product = random1 * random2;
-
-                    System.out.printf("%n%d x %d = ", random1, random2);
-                    answer = getInt();
-
-                    if (answer == product) {
-                        score++;
-                    }
+                    score = multiplication();
+                    totalScore += score;
                     break;
 
                 case 4:
-                    // case 4: division
-                    random1 = ThreadLocalRandom.current().nextInt(11, 100);
-                    random2 = ThreadLocalRandom.current().nextInt(2, 10);
-
-                    // To prevent asking division questions with remainders
-                    int modulus = random1 % random2 == 0 ? 1 : 2;
-                    int quotient;
-                    
-                    // Continue assigning new random ints until quotient does not contain remainder
-                    switch (modulus) {
-                        case 1:
-                            System.out.printf("%n%d / %d = ", random1, random2);
-                            quotient = random1 / random2;
-                            answer = getInt();
-
-                            if (answer == quotient) {
-                                score++;
-                            } 
-                            break;
-
-                        case 2:
-                            break;
-                    }
+                    score = division();
+                    totalScore += score;
                     break;
+
             }
         // End loop when user has correctly answered 12 questions
         // Incorrect answers do not increment score
-        } while (score != 12); 
+        } while (totalScore != 12); 
         
         // Calculate final time
         long end = System.currentTimeMillis();
@@ -177,6 +112,7 @@ public class NumberMonster {
 
         return parsed;
     }
+
     // Used to validate mode input at start of game
     static int getMode() {
         //Mode is int 1-5
@@ -188,15 +124,107 @@ public class NumberMonster {
             badInt = false;
             try { //catch (Exception e) catches bad input exceptions
                 do {
+                        System.out.printf("Game mode: ");
                         mode = Integer.parseInt(readMode.nextLine());
                 } while (mode < 1 || mode > 5);  //while game mode isnt within valid range
             } catch (Exception e) {
                 //catch exception if Integer.parseInt fails (ie. user entered something other than an int)
                 badInt = true;
-                System.out.printf("Game mode: ");
             }
         } while (badInt);
         //Return the mode as an int
         return mode;
+    }
+
+    private static int addition() {
+        int score = 0;
+        int random1 = ThreadLocalRandom.current().nextInt(1, 10);
+        int random2 = ThreadLocalRandom.current().nextInt(1, 10);
+
+        int sum = random1 + random2;
+
+        System.out.printf("%n%d + %d = ", random1, random2);
+        int answer = getInt();
+
+        if (answer == sum) {
+            score++;
+        }
+        return score;
+    }
+
+    private static int subtraction() {
+        int score = 0;
+        int random1 = ThreadLocalRandom.current().nextInt(1, 10);
+        int random2 = ThreadLocalRandom.current().nextInt(1, 10);
+
+        // To prevent asking subtraction questions with negative differences
+        int order = random1 > random2 ? 1 : 2;
+        int difference = 0;
+        
+        // Subtract smaller int from larger int
+        switch (order) {
+            case 1:
+                difference = random1 - random2;
+                System.out.printf("%n%d - %d = ", random1, random2);
+                break;
+
+            case 2:
+                difference = random2 - random1;
+                System.out.printf("%n%d - %d = ", random2, random1);
+                break;
+        }
+
+        int answer = getInt();
+
+        if (answer == difference) {
+            score++;
+        }
+        return score;
+    }
+
+    private static int multiplication() {
+        int score = 0;
+        int random1 = ThreadLocalRandom.current().nextInt(1, 10);
+        int random2 = ThreadLocalRandom.current().nextInt(1, 10);
+
+        int product;
+
+        product = random1 * random2;
+
+        System.out.printf("%n%d x %d = ", random1, random2);
+        int answer = getInt();
+
+        if (answer == product) {
+            score++;
+        }
+        return score;
+    }
+
+    private static int division() {
+        int score = 0;
+        
+        int random1 = ThreadLocalRandom.current().nextInt(11, 100);
+        int random2 = ThreadLocalRandom.current().nextInt(2, 10);
+
+        // To prevent asking division questions with remainders
+        int modulus = random1 % random2 == 0 ? 1 : 2;
+        int quotient;
+        
+        // Continue assigning new random ints until quotient does not contain remainder
+        switch (modulus) {
+            case 1:
+                System.out.printf("%n%d / %d = ", random1, random2);
+                quotient = random1 / random2;
+                int answer = getInt();
+
+                if (answer == quotient) {
+                    score++;
+                } 
+                break;
+
+            case 2:
+                break;
+        }
+        return score;
     }
 }
