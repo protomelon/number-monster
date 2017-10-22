@@ -4,23 +4,21 @@ import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;  
 
 public class NumberMonster {
-
     public static void main(String[] args) {
-        
-        // Scanner created to read user input
+       
         Scanner reader = new Scanner(System.in);
+        
         System.out.printf("%nWelcome to Number Monster!%nHow quickly can you solve 12 simple mental math questions?%n%n");
 
         // Loads and displays a list of high scores
         HighScore highScores = new HighScore("high.score");
-        if (highScores.getScoresList() != null)
-        {
+        if (highScores.getScoresList() != null) {
             highScores.printHighScores();
         }
 
         String username;
         System.out.printf("%nEnter your name to play: %n");
-        username = reader.next();
+        username = reader.nextLine();
 
         System.out.printf("%nChoose your monster:%n[1] Addition%n[2] Subtraction%n[3] Multiplication%n[4] Division%n[5] All Operations%n%nGame mode: ");
         int mode = getMode();
